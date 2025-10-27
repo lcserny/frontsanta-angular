@@ -8,8 +8,7 @@ import {MatchesService} from '../matches.service';
   imports: [
     NgIf
   ],
-  templateUrl: './find-match.component.html',
-  styleUrl: './find-match.component.scss'
+  templateUrl: './find-match.component.html'
 })
 export class FindMatchComponent implements OnInit {
 
@@ -38,7 +37,6 @@ export class FindMatchComponent implements OnInit {
     setInterval(() => this.createSnowflake(), 100)
   }
 
-  // FIXME snoflakes only on left of screen...
   private createSnowflake() {
     const snowflake = document.createElement('div');
     snowflake.classList.add('snowflake');
