@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import {environment} from '../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {NamesWrapper, NameTokenPair, TargetWrapper} from './models/matches.model';
-import {catchError, map, Observable, throwError} from 'rxjs';
+import {map, Observable} from 'rxjs';
 import {Router} from '@angular/router';
 
-const matchesUrl = environment.apiUrl + '/matches';
+const matchesUrl = '/api/matches';
 
 @Injectable({
   providedIn: 'root'
