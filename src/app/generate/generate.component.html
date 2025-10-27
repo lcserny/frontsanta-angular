@@ -1,0 +1,6 @@
+<ul *ngIf="links">
+  <li *ngFor="let link of links">
+    <a [href]="link" target="_blank" rel="noopener">{{ link }}</a>
+  </li>
+</ul>
+
