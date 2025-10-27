@@ -1,6 +1,22 @@
+<textarea [(ngModel)]="namesInput"
+  rows="10"
+  cols="50"
+  placeholder="Paste your JSON names and exclusions here"
+  class="w-full border p-2 rounded"
+></textarea>
+
+<div class="mt-3 flex gap-2">
+  <button (click)="processJson()" class="px-4 py-2 bg-blue-600 text-white rounded">
+    Process JSON
+  </button>
+  <button (click)="clear()" class="px-4 py-2 bg-gray-400 text-white rounded">
+    Clear
+  </button>
+</div>
+
 <ul *ngIf="links">
   <li *ngFor="let link of links">
-    <a [href]="link" target="_blank" rel="noopener">{{ link }}</a>
+    <a [href]="link" target="_blank" rel="noopener" style="color: white">{{ link }}</a>
   </li>
 </ul>
 

@@ -1,1 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
+
+$primary-color: #d90000;
+$dark-color: #3f0000;
+$text-color: white;
+$font-family: 'Comic Sans MS', cursive, sans-serif;
+
+html, body {
+  color: $text-color;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: linear-gradient(to bottom, $dark-color, $primary-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: $font-family;
+}

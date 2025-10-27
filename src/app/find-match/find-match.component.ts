@@ -1,9 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
-import {catchError, tap} from 'rxjs';
 import {NgIf} from '@angular/common';
-import {TargetWrapper} from '../models/matches.model';
+import {MatchesService} from '../matches.service';
 
 @Component({
   selector: 'app-find-match',
@@ -15,18 +13,44 @@ import {TargetWrapper} from '../models/matches.model';
 })
 export class FindMatchComponent implements OnInit {
 
+  @ViewChild('snowflakesContainer') snowflakesContainer!: ElementRef<HTMLDivElement>;
+
   from: string = "";
   target: string = "";
 
-  constructor(private route: ActivatedRoute, private httpClient: HttpClient) {
+  constructor(private route: ActivatedRoute, private matchesService: MatchesService) {
   }
 
   ngOnInit(): void {
+    this.startCreateSnowflakes();
+
     this.from = this.route.snapshot.paramMap.get('from') || "";
     const tokenParam = this.route.snapshot.paramMap.get('token');
 
-    this.httpClient.get<TargetWrapper>(`http://localhost:7070/matches/${tokenParam}`).subscribe(wrapper => {
-      this.target = wrapper.target;
-    })
+    if (tokenParam) {
+      this.matchesService.findTarget(tokenParam).subscribe(target => {
+        this.target = target;
+      })
+    }
+  }
+
+  startCreateSnowflakes() {
+    setInterval(() => this.createSnowflake(), 100)
+  }
+
+  // FIXME snoflakes only on left of screen...
+  private createSnowflake() {
+    const snowflake = document.createElement('div');
+    snowflake.classList.add('snowflake');
+    snowflake.textContent = '❄';
+    snowflake.style.left = Math.random() * 100 + '%';
+    snowflake.style.animationDuration = Math.random() * 3 + 5 + 's';
+    snowflake.style.fontSize = Math.random() * 50 + 10 + 'px';
+
+    this.snowflakesContainer?.nativeElement.appendChild(snowflake);
+
+    setTimeout(() => {
+      snowflake.remove();
+    }, parseFloat(snowflake.style.animationDuration) * 1000);
   }
 }

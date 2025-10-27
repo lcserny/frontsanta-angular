@@ -1,39 +1,55 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
 import {NamesWrapper, NameTokenPair} from '../models/matches.model';
 import {Router} from '@angular/router';
 import {NgForOf, NgIf} from '@angular/common';
+import {MatchesService} from '../matches.service';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-generate',
   imports: [
     NgIf,
-    NgForOf
+    NgForOf,
+    FormsModule
   ],
-  templateUrl: './generate.component.html',
-  styleUrl: './generate.component.scss'
+  templateUrl: './generate.component.html'
 })
 export class GenerateComponent implements OnInit {
 
+  namesInput: string = '';
   links: string[] = [];
 
-  constructor(private httpClient: HttpClient, private router: Router) {
+  constructor(private matchesService: MatchesService, private router: Router) {
   }
 
   ngOnInit(): void {
-    const namesWrapper: NamesWrapper = {
-      names: {
-        "casu": [],
-        "sabina": [],
-        "leo": ["sabina"],
-      }
-    }
+  }
 
-    this.httpClient.post<NameTokenPair[]>('http://localhost:7070/matches', namesWrapper).subscribe(pairs => {
-      this.links = pairs.map(pair => {
-        const urlTree = this.router.createUrlTree(['/find-match', pair.name, pair.token]);
-        return this.router.serializeUrl(urlTree);
-      });
-    })
+  processJson() {
+    try {
+      /*
+      {
+        "names": {
+          "leo": ["sabi", "casi"],
+          "sabi": ["leo", "casi"],
+          "casi": ["sabi", "leo"],
+          "alis": ["matei", "ana"],
+          "matei": ["alis", "ana"],
+          "ana": ["matei", "alis"]
+        }
+      }
+       */
+      const namesWrapper: NamesWrapper = JSON.parse(this.namesInput);
+      this.matchesService.generateLinks(namesWrapper).subscribe(links => {
+        this.links = links;
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  clear() {
+    this.namesInput = '';
+    this.links = [];
   }
 }

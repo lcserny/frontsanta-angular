@@ -1,4 +1,12 @@
-<div>
-  <span *ngIf="target">{{ from }} + {{ target }}</span>
-  <span *ngIf="!target">No match found</span>
-</div>
+<!--<div>-->
+  <div *ngIf="target" class="container">
+    <h1>Hello <span>{{ from }}</span>!</h1>
+    <h2>Your Secret Santa is: <span class="highlight">{{ target }}</span></h2>
+  </div>
+  <div *ngIf="!target" class="container">
+    <h1>Link was already accessed, it cannot be viewed again!</h1>
+  </div>
+
+  <div #snowflakesContainer id="snowflakes-container"></div>
+  <img src="/img/secret-santa.png" class="bottom-right-image" alt="secret santa logo">
+<!--</div>-->
