@@ -1,22 +1,37 @@
-<textarea [(ngModel)]="namesInput"
-  rows="10"
-  cols="50"
-  placeholder="Paste your JSON names and exclusions here"
-  class="w-full border p-2 rounded"
-></textarea>
+<form [formGroup]="form">
+  <div formArrayName="participant" class="container-flex">
+    <div *ngFor="let participant of participants.controls; let i = index" [formGroupName]="i" class="item">
 
-<div class="mt-3 flex gap-2">
-  <button (click)="processJson()" class="px-4 py-2 bg-blue-600 text-white rounded">
-    Process JSON
-  </button>
-  <button (click)="clear()" class="px-4 py-2 bg-gray-400 text-white rounded">
-    Clear
-  </button>
+      <label>Name:
+        <input formControlName="name" placeholder="Enter name" class="name-input"/>
+      </label>
+
+      <div formArrayName="exclusions" style="margin-top: 0.5em;">
+        <div *ngFor="let exclusion of getExclusions(i).controls; let j = index" [formGroupName]="j">
+          <input formControlName="exclusion" placeholder="Exclusion {{ j + 1 }}" class="exclusion-input"/>
+        </div>
+        <button type="button" (click)="addExclusio(i)">+ Add Exclusion</button>
+      </div>
+    </div>
+  </div>
+
+
+</form>
+
+<div class="container-flex">
+  <div class="item">
+    <button type="button" (click)="addParticipant()">+ Add Participant</button>
+    <br>
+    <button type="button" (click)="parseParticipants()" class="parse-button">Parse</button>
+
+    <ul *ngIf="links">
+      <li *ngFor="let link of links">
+        <a [href]="link" target="_blank" rel="noopener" style="color: white">{{ link }}</a>
+      </li>
+    </ul>
+
+    <div *ngIf="error">
+      <span>{{ error }}</span>
+    </div>
+  </div>
 </div>
-
-<ul *ngIf="links">
-  <li *ngFor="let link of links">
-    <a [href]="link" target="_blank" rel="noopener" style="color: white">{{ link }}</a>
-  </li>
-</ul>
-
