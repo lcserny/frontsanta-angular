@@ -1,14 +1,13 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {NamesWrapper, NameTokenPair, TargetWrapper} from './models/matches.model';
 import {map, Observable} from 'rxjs';
 import {Router} from '@angular/router';
 
 const matchesUrl = '/api/matches';
+// const matchesUrl = 'http://localhost:7070/matches';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({providedIn: 'root'})
 export class MatchesService {
 
   constructor(private httpClient: HttpClient, private router: Router) {

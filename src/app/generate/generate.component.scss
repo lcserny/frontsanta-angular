@@ -1,31 +1,49 @@
+#outer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 1rem;
+}
+
 .container-flex {
   display: flex;
-  flex-wrap: wrap;          /* allow wrapping if more than 3 fit in 900px */
-  justify-content: center;  /* center horizontally */
-  gap: 20px;                /* optional spacing between participants */
-  width: 900px;
-  margin: 0 auto;           /* center the whole container on the page */
-}
-
-.name-input {
-  width: 150px;
-}
-
-.exclusion-input {
-  width: 202px;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .item {
-  border: 1px solid #ccc;
-  padding: 1em;
-  width: 250px;
   display: flex;
-  flex-direction: column;   /* stack label + inputs vertically */
-  box-sizing: border-box;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 0.1rem solid white;
+  padding: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .item {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .name-input,
+  .exclusion-input {
+    flex: 1;
+  }
+
+  #outer-container {
+    min-height: 100vh;
+    justify-content: center;
+  }
+}
+
+.add-participant {
+  margin-top: 10px;
 }
 
 .parse-button {
-  width: 150px;
-  height: 30px;
-  margin-top: 5px;
+  display: block;
+  width: 200px;
+  height: 40px;
+  margin-top: 15px;
 }

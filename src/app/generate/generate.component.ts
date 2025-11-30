@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {NamesWrapper, NameTokenPair} from '../models/matches.model';
+import {Component} from '@angular/core';
+import {NamesWrapper, Participant} from '../models/matches.model';
 import {NgForOf, NgIf} from '@angular/common';
 import {MatchesService} from '../matches.service';
 import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -23,47 +23,29 @@ export class GenerateComponent {
 
   constructor(private matchesService: MatchesService, private fb: FormBuilder) {
     this.form = this.fb.group({
-      participant: this.fb.array([this.createParticipant()])
+      participants: this.fb.array([this.createParticipant()])
     });
   }
 
   get participants(): FormArray {
-    return this.form.get('participant') as FormArray;
-  }
-
-  createParticipant(): FormGroup {
-    return this.fb.group({
-      name: [''],
-      exclusions: this.fb.array([this.createExclusion()])
-    });
+    return this.form.get('participants') as FormArray;
   }
 
   addParticipant() {
     this.participants.push(this.createParticipant());
   }
 
-  createExclusion(): FormGroup {
+  createParticipant(): FormGroup {
     return this.fb.group({
-      exclusion: ['']
+      name: "",
+      exclusions: ""
     });
   }
 
-  getExclusions(idx: number): FormArray {
-    return this.participants.at(idx).get('exclusions') as FormArray;
-  }
-
-  addExclusio(idx: number) {
-    this.getExclusions(idx).push(this.createExclusion());
-  }
-
-  // TODO
-  parseParticipants() {
-    const data: {
-      name: string,
-      exclusions: string[]
-    }[] = this.participants.value.map((participant: any, idx: number) => ({
+  generateLinks() {
+    const data: Participant[] = this.participants.value.map((participant: any, idx: number) => ({
       name: participant.name,
-      exclusions: participant.exclusions.map((i: any) => i.exclusion).filter((v: string) => v.trim() !== '')
+      exclusions: participant.exclusions.split(",").map((item: string) => item.trim()).filter((item: string) => item.length > 0)
     }));
 
     const namesWrapper: NamesWrapper = {

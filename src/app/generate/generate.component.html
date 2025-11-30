@@ -1,37 +1,23 @@
-<form [formGroup]="form">
-  <div formArrayName="participant" class="container-flex">
-    <div *ngFor="let participant of participants.controls; let i = index" [formGroupName]="i" class="item">
-
-      <label>Name:
-        <input formControlName="name" placeholder="Enter name" class="name-input"/>
-      </label>
-
-      <div formArrayName="exclusions" style="margin-top: 0.5em;">
-        <div *ngFor="let exclusion of getExclusions(i).controls; let j = index" [formGroupName]="j">
-          <input formControlName="exclusion" placeholder="Exclusion {{ j + 1 }}" class="exclusion-input"/>
-        </div>
-        <button type="button" (click)="addExclusio(i)">+ Add Exclusion</button>
+<div id="outer-container">
+  <form [formGroup]="form">
+    <div formArrayName="participants" class="container-flex">
+      <div *ngFor="let participant of participants.controls; let i = index" [formGroupName]="i" class="item">
+        <input formControlName="name" placeholder="Name" class="name-input"/>
+        <input formControlName="exclusions" placeholder="Exclusions (Ion, Mihai..." class="exclusion-input"/>
       </div>
     </div>
-  </div>
+  </form>
 
+  <button type="button" (click)="addParticipant()" class="add-participant">+ Add participant</button>
+  <button type="button" (click)="generateLinks()" class="parse-button">Generate</button>
 
-</form>
+  <ul *ngIf="links">
+    <li *ngFor="let link of links">
+      <a [href]="link" target="_blank" rel="noopener" style="color: white">{{ link }}</a>
+    </li>
+  </ul>
 
-<div class="container-flex">
-  <div class="item">
-    <button type="button" (click)="addParticipant()">+ Add Participant</button>
-    <br>
-    <button type="button" (click)="parseParticipants()" class="parse-button">Parse</button>
-
-    <ul *ngIf="links">
-      <li *ngFor="let link of links">
-        <a [href]="link" target="_blank" rel="noopener" style="color: white">{{ link }}</a>
-      </li>
-    </ul>
-
-    <div *ngIf="error">
-      <span>{{ error }}</span>
-    </div>
+  <div *ngIf="error">
+    <span>{{ error }}</span>
   </div>
 </div>

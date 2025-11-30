@@ -10,3 +10,8 @@ export interface TargetWrapper {
 export interface NamesWrapper {
   names: Record<string, string[]>;
 }
+
+export interface Participant {
+  name: string;
+  exclusions: string[];
+}
