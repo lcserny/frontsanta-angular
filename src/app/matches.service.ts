@@ -24,8 +24,8 @@ export class MatchesService {
     );
   }
 
-  findTarget(token: string): Observable<string> {
-    return this.httpClient.get<TargetWrapper>(`${matchesUrl}/${token}`).pipe(
+  revealTarget(token: string): Observable<string> {
+    return this.httpClient.post<TargetWrapper>(`${matchesUrl}/${token}/reveal`, null).pipe(
       map(wrapper => wrapper.target)
     );
   }

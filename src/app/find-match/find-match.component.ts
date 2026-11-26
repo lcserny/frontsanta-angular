@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {NgIf} from '@angular/common';
 import {MatchesService} from '../matches.service';
@@ -8,14 +8,21 @@ import {MatchesService} from '../matches.service';
   imports: [
     NgIf
   ],
-  templateUrl: './find-match.component.html'
+  templateUrl: './find-match.component.html',
+  styleUrls: ['./find-match.component.scss']
 })
-export class FindMatchComponent implements OnInit {
+export class FindMatchComponent implements OnInit, OnDestroy {
 
   @ViewChild('snowflakesContainer') snowflakesContainer!: ElementRef<HTMLDivElement>;
 
-  from: string = "";
-  target: string = "";
+  from = "";
+  target = "";
+  loading = false;
+  error = "";
+  consumed = false;
+
+  private token = "";
+  private snowflakeTimer?: ReturnType<typeof setInterval>;
 
   constructor(private route: ActivatedRoute, private matchesService: MatchesService) {
   }
@@ -24,17 +31,45 @@ export class FindMatchComponent implements OnInit {
     this.startCreateSnowflakes();
 
     this.from = this.route.snapshot.paramMap.get('from') || "";
-    const tokenParam = this.route.snapshot.paramMap.get('token');
+    this.token = this.route.snapshot.paramMap.get('token') || "";
+  }
 
-    if (tokenParam) {
-      this.matchesService.findTarget(tokenParam).subscribe(target => {
-        this.target = target;
-      })
+  ngOnDestroy(): void {
+    if (this.snowflakeTimer) {
+      clearInterval(this.snowflakeTimer);
     }
   }
 
+  get canReveal(): boolean {
+    return !!this.token && !this.target && !this.loading && !this.consumed;
+  }
+
+  revealMatch(): void {
+    if (!this.canReveal) {
+      return;
+    }
+
+    this.loading = true;
+    this.error = "";
+    this.matchesService.revealTarget(this.token).subscribe({
+      next: target => {
+        this.target = target;
+        this.loading = false;
+      },
+      error: err => {
+        if (err?.status === 400) {
+          this.consumed = true;
+          this.error = "Link was already accessed, it cannot be viewed again!";
+        } else {
+          this.error = "Could not reveal your match. Please try again.";
+        }
+        this.loading = false;
+      }
+    });
+  }
+
   startCreateSnowflakes() {
-    setInterval(() => this.createSnowflake(), 100)
+    this.snowflakeTimer = setInterval(() => this.createSnowflake(), 100)
   }
 
   private createSnowflake() {
