@@ -2,8 +2,8 @@
   <form [formGroup]="form">
     <div formArrayName="participants" class="container-flex">
       <div *ngFor="let participant of participants.controls; let i = index" [formGroupName]="i" class="item">
-        <input formControlName="name" placeholder="Name" class="name-input"/>
-        <input formControlName="exclusions" placeholder="Exclusions (Ion, Mihai..." class="exclusion-input"/>
+        <input #nameInput formControlName="name" placeholder="Name" class="name-input"/>
+        <input formControlName="exclusions" placeholder="Exclusions (Ion, Mihai...)" class="exclusion-input"/>
       </div>
     </div>
   </form>

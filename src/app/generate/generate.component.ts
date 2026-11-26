@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, QueryList, ViewChildren} from '@angular/core';
 import {NamesWrapper, Participant} from '../models/matches.model';
 import {NgForOf, NgIf} from '@angular/common';
 import {MatchesService} from '../matches.service';
@@ -15,11 +15,15 @@ import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} fro
   templateUrl: './generate.component.html',
   styleUrls: ['./generate.component.scss']
 })
-export class GenerateComponent {
+export class GenerateComponent implements AfterViewChecked {
+
+  @ViewChildren('nameInput') nameInputs!: QueryList<ElementRef<HTMLInputElement>>;
 
   error: string = "";
   links: string[] = [];
   form: FormGroup;
+
+  private pendingFocusIndex: number | null = null;
 
   constructor(private matchesService: MatchesService, private fb: FormBuilder) {
     this.form = this.fb.group({
@@ -31,7 +35,15 @@ export class GenerateComponent {
     return this.form.get('participants') as FormArray;
   }
 
+  ngAfterViewChecked(): void {
+    if (this.pendingFocusIndex !== null && this.nameInputs.length > this.pendingFocusIndex) {
+      this.nameInputs.get(this.pendingFocusIndex)?.nativeElement.focus();
+      this.pendingFocusIndex = null;
+    }
+  }
+
   addParticipant() {
+    this.pendingFocusIndex = this.participants.length;
     this.participants.push(this.createParticipant());
   }
 
