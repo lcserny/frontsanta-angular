@@ -1,18 +1,18 @@
 <div *ngIf="target" class="container">
   <h1>Hello <span>{{ from }}</span>!</h1>
   <h2>Your Secret Santa is: <span class="highlight">{{ target }}</span></h2>
-  <p>Save the name now — this link can only be used once.</p>
+  <p class="message">Save the name now — this link can only be used once.</p>
 </div>
 
 <div *ngIf="!target" class="container">
   <h1 *ngIf="!consumed">Hello <span>{{ from }}</span>!</h1>
-  <p *ngIf="!consumed">Your match is hidden until you reveal it. Make sure nobody is looking.</p>
+  <p *ngIf="!consumed" class="message">Your match is hidden until you reveal it. Make sure nobody is looking.</p>
 
   <button *ngIf="canReveal" type="button" class="reveal-button" (click)="revealMatch()">
     {{ loading ? 'Revealing...' : 'Reveal my match' }}
   </button>
 
-  <p *ngIf="error" class="error">{{ error }}</p>
+  <p *ngIf="error" class="error message">{{ error }}</p>
 </div>
 
 <div #snowflakesContainer id="snowflakes-container"></div>

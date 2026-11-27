@@ -3,7 +3,7 @@
 $primary-color: #d90000;
 $dark-color: #3f0000;
 $text-color: white;
-$font-family: 'Comic Sans MS', cursive, sans-serif;
+$font-family: 'Times New Roman', cursive, serif;
 
 html, body {
   color: $text-color;
@@ -15,6 +15,7 @@ html, body {
   justify-content: center;
   align-items: center;
   font-family: $font-family;
+  font-style: italic;
 }
 
 h1, h2 {
