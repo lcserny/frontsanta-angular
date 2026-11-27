@@ -62,7 +62,9 @@ export class GenerateComponent implements AfterViewChecked {
 
     const namesWrapper: NamesWrapper = {
       names: data.reduce((acc, curr) => {
-        acc[curr.name] = curr.exclusions;
+        if (this.isNonEmptyString(curr.name)) {
+          acc[curr.name] = curr.exclusions;
+        }
         return acc;
       }, {} as Record<string, string[]>),
     };
@@ -76,5 +78,9 @@ export class GenerateComponent implements AfterViewChecked {
         this.error = err.message || JSON.stringify(err);
       }
     });
+  }
+
+  isNonEmptyString(value: unknown): value is string {
+    return typeof value === "string" && value.trim().length > 0;
   }
 }
